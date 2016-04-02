@@ -5,6 +5,7 @@ namespace Shamotj\DataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollector;
+use Shamotj\DataCollector\TraceablePDO;
 
 
 class PdoDataCollector extends DataCollector
@@ -16,7 +17,7 @@ class PdoDataCollector extends DataCollector
 
     function __construct($pdo)
     {
-        $this->pdo = $pdo;
+        $this->pdo = new TraceablePDO($pdo);
     }
 
     public function collect(Request $request, Response $response, \Exception $exception = null)
@@ -37,6 +38,7 @@ class PdoDataCollector extends DataCollector
         $data['accumulated_duration'] += $pdodata['accumulated_duration'];
         $data['memory_usage'] += $pdodata['memory_usage'];
         $data['peak_memory_usage'] = max($data['peak_memory_usage'], $pdodata['peak_memory_usage']);
+        $data['statements'] = $pdodata['statements'];
 
         $data['accumulated_duration_str'] = $data['accumulated_duration'];
         $data['memory_usage_str'] = $data['memory_usage'];
@@ -47,24 +49,18 @@ class PdoDataCollector extends DataCollector
 
     public function getQueries()
     {
-        return $this->data['queries'];
+        var_dump($this->data);
+        return $this->data['statements'];
     }
 
     public function getQueryCount()
     {
-        return count($this->data['queries']);
+        return count($this->data['nb_statements']);
     }
 
     public function getTime()
     {
-        $time = 0;
-        foreach ($this->data['queries'] as $queries) {
-            foreach ($queries as $query) {
-                $time += $query['executionMS'];
-            }
-        }
-
-        return $time;
+        return $this->data['accumulated_duration'];
     }
 
     public function getName()
@@ -90,11 +86,11 @@ class PdoDataCollector extends DataCollector
                 'prepared_stmt'  => $stmt->getSql(),
                 'params'         => (object)$stmt->getParameters(),
                 'duration'       => $stmt->getDuration(),
-                'duration_str'   => $this->getDataFormatter()->formatDuration($stmt->getDuration()),
+                'duration_str'   => $stmt->getDuration(),
                 'memory'         => $stmt->getMemoryUsage(),
-                'memory_str'     => $this->getDataFormatter()->formatBytes($stmt->getMemoryUsage()),
+                'memory_str'     => $stmt->getMemoryUsage(),
                 'end_memory'     => $stmt->getEndMemory(),
-                'end_memory_str' => $this->getDataFormatter()->formatBytes($stmt->getEndMemory()),
+                'end_memory_str' => $stmt->getEndMemory(),
                 'is_success'     => $stmt->isSuccess(),
                 'error_code'     => $stmt->getErrorCode(),
                 'error_message'  => $stmt->getErrorMessage()
@@ -108,11 +104,11 @@ class PdoDataCollector extends DataCollector
             'nb_statements'            => count($stmts),
             'nb_failed_statements'     => count($pdo->getFailedExecutedStatements()),
             'accumulated_duration'     => $pdo->getAccumulatedStatementsDuration(),
-            'accumulated_duration_str' => $this->getDataFormatter()->formatDuration($pdo->getAccumulatedStatementsDuration()),
+            'accumulated_duration_str' => $pdo->getAccumulatedStatementsDuration(),
             'memory_usage'             => $pdo->getMemoryUsage(),
-            'memory_usage_str'         => $this->getDataFormatter()->formatBytes($pdo->getPeakMemoryUsage()),
+            'memory_usage_str'         => $pdo->getPeakMemoryUsage(),
             'peak_memory_usage'        => $pdo->getPeakMemoryUsage(),
-            'peak_memory_usage_str'    => $this->getDataFormatter()->formatBytes($pdo->getPeakMemoryUsage()),
+            'peak_memory_usage_str'    => $pdo->getPeakMemoryUsage(),
             'statements'               => $stmts
         );
     }
