@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Neonus": "src"
+            "Shamotj": "src"
         }
     }
 }
