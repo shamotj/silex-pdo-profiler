@@ -1,0 +1,27 @@
+{
+    "name": "shamotj/silex-pdo-profiler",
+    "description": "PDO Profiler for Silex",
+    "keywords": [
+        "silex",
+        "profiler",
+        "pdo",
+        "notorm"
+    ],
+    "homepage": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "NEONUS, s.r.o.",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "silex/silex": "~1.0",
+        "silex/web-profiler": "~1.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Neonus": "src"
+        }
+    }
+}
