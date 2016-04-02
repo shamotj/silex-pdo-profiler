@@ -1,6 +1,6 @@
 <?php
 
-namespace Neonus\DataCollector;
+namespace Shamotj\DataCollector;
 
 use PDO;
 use PDOException;

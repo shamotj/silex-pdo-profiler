@@ -1,6 +1,6 @@
 <?php
 
-namespace Neonus\DataCollector;
+namespace Shamotj\DataCollector;
 
 /**
  * Holds information about a statement

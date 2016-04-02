@@ -1,6 +1,6 @@
 <?php
 
-namespace Neonus\DataCollector;
+namespace Shamotj\DataCollector;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

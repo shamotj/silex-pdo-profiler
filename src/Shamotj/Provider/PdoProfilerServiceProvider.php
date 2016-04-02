@@ -1,10 +1,10 @@
 <?php
 
-namespace Neonus\Provider;
+namespace Shamotj\Provider;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Neonus\DataCollector\PdoDataCollector;
+use Shamotj\DataCollector\PdoDataCollector;
 
 class PdoProfilerServiceProvider implements ServiceProviderInterface
 {
