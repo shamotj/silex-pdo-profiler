@@ -8,7 +8,7 @@ Composer
 
 ```json
     "require": {
-        "neonus/silex-pdo-profiler": "~1"
+        "shamotj/silex-pdo-profiler": "~1"
     }
 ```
 
