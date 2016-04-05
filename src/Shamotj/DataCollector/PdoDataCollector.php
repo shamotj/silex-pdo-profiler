@@ -49,7 +49,6 @@ class PdoDataCollector extends DataCollector
 
     public function getQueries()
     {
-        var_dump($this->data);
         return $this->data['statements'];
     }
 
