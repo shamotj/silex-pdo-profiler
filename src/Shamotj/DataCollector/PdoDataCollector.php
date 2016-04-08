@@ -54,7 +54,7 @@ class PdoDataCollector extends DataCollector
 
     public function getQueryCount()
     {
-        return count($this->data['nb_statements']);
+        return $this->data['nb_statements'];
     }
 
     public function getTime()
