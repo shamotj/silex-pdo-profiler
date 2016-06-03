@@ -3,7 +3,6 @@
 namespace Shamotj\Provider;
 
 use Pimple\Container;
-use Silex\Application;
 use Pimple\ServiceProviderInterface;
 use Shamotj\DataCollector\PdoDataCollector;
 
