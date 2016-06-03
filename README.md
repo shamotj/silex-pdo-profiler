@@ -6,10 +6,8 @@ This code is based on sorien/silex-dbal-profiler and maximebf/debugbar.
 
 Composer
 
-```json
-    "require": {
-        "shamotj/silex-pdo-profiler": "~1"
-    }
+```bash
+    composer require shamotj/silex-pdo-profiler
 ```
 
 Register
