@@ -27,6 +27,8 @@ class TracedStatement
 
     protected $exception;
 
+    protected $backtrace;
+
     /**
      * @param string $sql
      * @param array $params
@@ -42,6 +44,7 @@ class TracedStatement
         $this->sql = $sql;
         $this->parameters = $this->checkParameters($params);
         $this->preparedId = $preparedId;
+        $this->backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
     }
 
     public function start($startTime = null, $startMemory = null)
@@ -236,5 +239,10 @@ class TracedStatement
     public function getErrorMessage()
     {
         return $this->exception !== null ? $this->exception->getMessage() : '';
+    }
+
+    public function getBacktrace()
+    {
+        return $this->backtrace;
     }
 }

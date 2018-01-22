@@ -27,9 +27,7 @@
 
 {% block menu %}
     <span class="label">
-    <span class="icon"><img
-                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB/E6/TAAABLUlEQVR42u3TP0vDQBiA8UK/gDiLzi0IhU4OEunk5OQUAhGSOBUCzqWfIKSzX8DRySF0URCcMjWLIJjFD9Cpk/D6HITecEPUuzhIAz8CIdyTP/f2iqI4qaqqDx8l5Ic2uIeP/bquezCokOAFF+oCN3t4gPzSEjc4NEPaCldQbzjELTYW0RJzHDchwwem+ons6ZBpLSJ7nueJC22h0V+FzmwWV0ee59vQNV67CGVZJmEYbkNjfpY6X6I0Qo4/3RMmTdDDspuQVsJvgkP3IdMbIkIjLPBoadG2646iKJI0Ta2wxm6OdnP0/Tk6DYJgHcfxpw21RtscDTDDnaVZ26474GkkSRIrrPEv5sgMTfHe+cA2O6wPH6vOBpYQNALneHb96XTEDI6dzpEZ0VzO0Rf3pP5LMLI4tAAAAABJRU5ErkJggg=="
-                alt=""/></span>
+    <span class="icon"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAcCAYAAAB/E6/TAAABLUlEQVR42u3TP0vDQBiA8UK/gDiLzi0IhU4OEunk5OQUAhGSOBUCzqWfIKSzX8DRySF0URCcMjWLIJjFD9Cpk/D6HITecEPUuzhIAz8CIdyTP/f2iqI4qaqqDx8l5Ic2uIeP/bquezCokOAFF+oCN3t4gPzSEjc4NEPaCldQbzjELTYW0RJzHDchwwem+ons6ZBpLSJ7nueJC22h0V+FzmwWV0ee59vQNV67CGVZJmEYbkNjfpY6X6I0Qo4/3RMmTdDDspuQVsJvgkP3IdMbIkIjLPBoadG2646iKJI0Ta2wxm6OdnP0/Tk6DYJgHcfxpw21RtscDTDDnaVZ26474GkkSRIrrPEv5sgMTfHe+cA2O6wPH6vOBpYQNALneHb96XTEDI6dzpEZ0VzO0Rf3pP5LMLI4tAAAAABJRU5ErkJggg==" alt=""/></span>
     <strong>PDO</strong>
     <span class="count">
         <span>{{ collector.querycount }}</span>
@@ -41,20 +39,46 @@
 {% block panel %}
     <h2>Queries</h2>
     {% set count = collector.querycount %}
-
-    <ul class="alt">
+    <table class="alt queries-table">
+        <thead>
+        <tr>
+            <th class="nowrap">#<span class="text-muted">▲</span></th>
+            <th class="nowrap">Time<span></span></th>
+            <th style="width: 100%;">Info</th>
+        </tr>
+        </thead>
+        <tbody>
         {% for i, query in collector.queries %}
-            <li class="{{ cycle(['odd', 'even'], i) }}">
-                <div>
-                    <code>{{ query.sql }}</code>
-                </div>
-                <small>
-                    {% if query.params|length > 0 %}
-                        <strong>Parameters</strong>: {{ query.params|json_encode() }}<br/>
+            <tr class="{{ cycle(['odd', 'even'], i) }}">
+                <td>{{ i }}</td>
+                <td class="nowrap">{{ '%0.2f'|format(query.duration * 1000) }} ms</td>
+                <td>
+                    <pre class="highlight highlight-sql">{{ query.sql }}</pre>
+                    <div class="text-small font-normal">
+                        {% if query.params|length > 0 %}
+                            <strong>Parameters</strong>: {{ query.params|json_encode() }}
+                        {% endif %}
+                    </div>
+                    <div class="text-small font-normal">
+                    {% if query.backtrace|length > 0 %}
+                        <a href="#" class="sf-toggle link-inverse sf-toggle-off" data-toggle-selector="#backtrace-{{ i }}">backtrace</a>
+                        <div id="backtrace-{{ i }}" class="hidden sf-toggle-content sf-toggle-hidden">
+                            <ol>
+                            {% for trace in query.backtrace %}
+                                <li>
+                                    {% if trace.file is defined %}
+                                        <strong>{{ trace.file }}</strong> line {{ trace.line }}<br>
+                                    {% endif %}
+                                    {% if trace.class is defined %}<strong>class:</strong> {{ trace.class }},{% endif %} <strong>function:</strong> {{ trace.function }}
+                                </li>
+                            {% endfor %}
+                            </ol>
+                        </div>
                     {% endif %}
-                    <strong>Time</strong>: {{ '%0.2f'|format(query.duration * 1000) }} ms
-                </small>
-            </li>
+                    </div>
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
+        </tbody>
+    </table>
 {% endblock %}

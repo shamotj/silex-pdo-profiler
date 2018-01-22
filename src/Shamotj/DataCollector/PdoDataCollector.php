@@ -24,12 +24,12 @@ class PdoDataCollector extends DataCollector
     {
 
         $data = array(
-            'nb_statements' => 0,
+            'nb_statements'        => 0,
             'nb_failed_statements' => 0,
             'accumulated_duration' => 0,
-            'memory_usage' => 0,
-            'peak_memory_usage' => 0,
-            'statements' => array()
+            'memory_usage'         => 0,
+            'peak_memory_usage'    => 0,
+            'statements'           => array()
         );
 
         $pdodata = $this->collectPDO($this->pdo);
@@ -92,7 +92,8 @@ class PdoDataCollector extends DataCollector
                 'end_memory_str' => $stmt->getEndMemory(),
                 'is_success'     => $stmt->isSuccess(),
                 'error_code'     => $stmt->getErrorCode(),
-                'error_message'  => $stmt->getErrorMessage()
+                'error_message'  => $stmt->getErrorMessage(),
+                'backtrace'      => $stmt->getBacktrace()
             );
             if ($timeCollector !== null) {
                 $timeCollector->addMeasure($stmt->getSql(), $stmt->getStartTime(), $stmt->getEndTime());
