@@ -65,7 +65,7 @@ class TraceablePDO extends PDO
         return $this->pdo->prepare($sql, $driver_options);
     }
 
-    public function query($sql)
+    public function query(string $query, ?int $fetchMode = null, mixed ...$fetchModeArgs)
     {
         return $this->profileCall('query', $sql, func_get_args());
     }
